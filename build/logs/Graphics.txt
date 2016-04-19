@@ -1,0 +1,2 @@
+0s: Initializing of A window
+0.059674s: Done initializing of A window

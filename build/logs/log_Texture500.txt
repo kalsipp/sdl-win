@@ -1,0 +1,2 @@
+0s: Texture constructed
+1.28107s: Texture destructed

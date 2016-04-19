@@ -1,0 +1,4 @@
+0s: Texture constructed
+0s: Loading new texture from filemedia\illuminati.png
+0.006004s: Image size: 512w, 512h.
+1.29008s: Texture destructed
