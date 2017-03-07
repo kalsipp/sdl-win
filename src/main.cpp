@@ -1,12 +1,12 @@
 #include <iostream>
-#include <string>
-#include "graphics.hpp"
-#undef main
-int main(){
-	Graphics g;
-	g.run();
-	std::cout << "Hello " << std::endl;
-	std::string hello;
-	std::cin >> hello;
+#include <stdio.h>
+
+#include "mainclass.hpp"
+int main( int argc, char* args[] )
+{
+	std::cout << "main started" << std::endl;
+	Mainclass game;
+	game.run();
+	std::cout << "main ended" << std::endl;
 	return 0;
-}
+}  

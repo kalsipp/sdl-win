@@ -1,4 +1,0 @@
-0.001001s: Texture constructed
-0.001001s: Loading new texture from filemedia\sword.png
-0.002002s: Image size: 160w, 160h.
-1.28408s: Texture destructed

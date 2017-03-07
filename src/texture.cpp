@@ -1,132 +1,64 @@
 #include "texture.hpp"
-#include <cassert>
-#include <stdlib.h>
-Texture::Texture(SDL_Renderer * rend) {
-	m_log = new Logger(m_logfile_name + std::to_string(rand()%1000) + ".txt");
-	m_log->log("Texture constructed");
-	m_sdl_renderer = rend;
-}
-Texture::~Texture() {
-	free();
-	TTF_CloseFont(m_font);
-	m_log->log("Texture destructed");
-	delete m_log;
-}
 
-bool Texture::load_from_file(const std::string & path) {
-	m_log->log("Loading new texture from file" + path); 
-	free();
-	SDL_Texture * new_texture = nullptr;
-	m_surface = IMG_Load(path.c_str()); 
-	m_log->log("Image size: " + std::to_string(m_surface->w) + "w, "+ std::to_string(m_surface->h) +"h.");
-	if (m_surface == nullptr) {
-		m_log->log("Unable to load image " + path + " SDL Error: " + SDL_GetError() + " (texture)"); 
+
+Texture::Texture(SDL_Renderer const * renderer) : m_main_renderer(renderer){
+	//m_main_renderer = renderer;
+
+}
+bool Texture::load_image_from_surface(SDL_Surface * new_surf){
+	m_my_surface = new_surf;
+	SDL_Renderer * rend = const_cast<SDL_Renderer*>(m_main_renderer);
+	m_my_texture = SDL_CreateTextureFromSurface(rend, new_surf);
+	return m_my_texture != NULL;
+}
+bool Texture::load_image_from_file(const std::string & path){
+	m_source_path = path; 
+	if(m_my_texture != NULL) {
+		SDL_DestroyTexture(m_my_texture);
+		m_my_texture = NULL;
 	}
-	else {
-
-		SDL_PixelFormat * px = m_surface->format;
-		SDL_Surface * loaded = m_surface;
-		SDL_Surface *out = SDL_CreateRGBSurface(0, 1, 1, loaded->format->BitsPerPixel, loaded->format->Rmask, loaded->format->Gmask, loaded->format->Bmask, loaded->format->Amask);
-		SDL_BlitScaled(m_surface, 0, out, 0);
-		new_texture = SDL_CreateTextureFromSurface(m_sdl_renderer, out);
-
-		if (new_texture == nullptr) {
-			m_log->log("Unable to create texture from " + path + "! SDL Error: " + SDL_GetError());
+	std::cout << "Loading image " << m_source_path << "." << std::endl;
+	m_my_surface = IMG_Load(m_source_path.c_str());
+	if(m_my_surface == NULL){
+		std::cout << "Unable to load image " << m_source_path << " SDL Error: " << SDL_GetError() << "." << std::endl;
+	}else{
+		std::cout << "Image is " <<  std::to_string(m_my_surface->w) << "w, " << std::to_string(m_my_surface ->h) << "h." << std::endl;
+		SDL_Renderer * rend = const_cast<SDL_Renderer*>(m_main_renderer);
+		m_my_texture = SDL_CreateTextureFromSurface(rend, m_my_surface);
+		if(m_my_texture == NULL){
+			std::cout << "Unable to create texture from " << m_source_path << "! SDL Error: " << SDL_GetError() << ".";
 		}
-		else {
-			m_width = m_surface->w;
-			m_height = m_surface->h;
-			
-		}
-		//SDL_FreeSurface(loaded_surface);
-		m_texture = new_texture;
-	}
-	return m_texture != nullptr;
-}
-
-bool Texture::load_from_rendered_text(const std::string & texture_text, SDL_Color text_color) {
-	free();
-
-	SDL_Surface * textsurface = TTF_RenderText_Solid(m_font, texture_text.c_str(), text_color);
-	if (textsurface == nullptr) {
-		m_log->log("Unable to render text surface! SDL_ttf Error: " + std::string(TTF_GetError()));
-	}
-	else {
-		m_texture = SDL_CreateTextureFromSurface(m_sdl_renderer, textsurface);
-		if (m_texture == nullptr) {
-			m_log->log("Unable to create texture from rendered text! SDL Error: " + std::string(SDL_GetError()));
-		}
-		else {
-			m_width = textsurface->w;
-			m_height = textsurface->h;
-		}
-		SDL_FreeSurface(textsurface);
-	}
-	return m_texture != nullptr;
-}
-
-void Texture::free() {
-	if (m_texture != nullptr) {
-		SDL_DestroyTexture(m_texture);
-		m_texture = nullptr;
-		m_width = 0;
-		m_height = 0;
-	}
-}
-
-void Texture::render(int x, int y, SDL_Rect * clip) {
-	SDL_Rect renderquad = { x,y,m_width, m_height };
-
-	if (clip != nullptr) {
-		renderquad.w = clip->w;
-		renderquad.h = clip->h;
 	}
 
-	SDL_RenderCopy(m_sdl_renderer, m_texture, clip, &renderquad);
+	return m_my_texture != NULL;
 }
 
-void Texture::resize(int x, int y){
-	SDL_Rect stretchrect;
-	stretchrect.x = 0;
-	stretchrect.y = 0;
-	stretchrect.w = x;
-	stretchrect.y = y;
-	//SDL_Surface * newsurf;
-	SDL_BlitScaled(m_surface, 0, m_surface, &stretchrect);
-	//SDL_FreeSurface(m_surface);
-	//m_surface = newsurf;
-	SDL_DestroyTexture(m_texture);
-	m_texture = SDL_CreateTextureFromSurface(m_sdl_renderer, m_surface);
-	m_width = m_surface->w;
-	m_height = m_surface->h;
-
+void Texture::scale(float x, float y){
+	//std::cout << "Scaling texture to x:" << x << " y:" << y << std::endl;
+	m_scale_x = x;
+	m_scale_y = y;
 }
 
-int Texture::get_height() {
-	return m_height;
-}
-int Texture::get_width() {
-	return m_width;
+Texture::~Texture(){
+	SDL_FreeSurface(m_my_surface);
+	SDL_DestroyTexture(m_my_texture);
 }
 
-void Texture::set_color(Uint8 red, Uint8 green, Uint8 blue) {
-	SDL_SetTextureColorMod(m_texture, red, green, blue);
-}
 
-void Texture::set_alpha(Uint8 alpha) {
-	SDL_SetTextureAlphaMod(m_texture, alpha);
-}
-void Texture::set_blendmode(SDL_BlendMode blending) {
-	SDL_SetTextureBlendMode(m_texture, blending);
-}
-void Texture::set_font(const std::string & path) {
-	if (m_font != nullptr) {
-		TTF_CloseFont(m_font);
-		m_font = nullptr;
-	}
-	m_font = TTF_OpenFont(("fonts\\" + path).c_str(), 28);
-	if (m_font == nullptr)
-	{
-		m_log->log("Failed to load lazy font! SDL_ttf Error: " + std::string(TTF_GetError()));
-	}
+
+void Texture::render(float x, float y, SDL_RendererFlip fliptype){
+
+	//std::cout << "x " << x << " y " << y << " width " << m_my_surface->w << " height " << m_my_surface->h << std::endl;
+
+
+
+
+	int scalex = m_my_surface->w*m_scale_x;
+	int scaley = m_my_surface->h*m_scale_y;
+	int posx = round(x);
+	int posy = round(y);
+	SDL_Rect scalerect = {posx,posy,scalex, scaley};
+	//SDL_RenderCopy(m_main_renderer, m_my_texture, clip, &renderquad);
+	SDL_Renderer * rend = const_cast<SDL_Renderer*>(m_main_renderer);
+	SDL_RenderCopyEx(rend, m_my_texture, NULL, &scalerect, 0, NULL, fliptype);
 }

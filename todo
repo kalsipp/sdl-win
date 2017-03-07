@@ -1,0 +1,19 @@
+Change gameobject animation to 4 sprite. 
+1. Walk down
+2. Walk up
+3. Walk left 1
+4. Walk left 2
+
+Then use programming to flip 1 and 2 to create a walking cycle. Flip 3 and 4 through programming to walk the other direction.
+OR
+
+1. Walk down
+2. Walk down flipped
+3. Walk up
+4. Walk up flipped
+5. Walk left 1. 
+6. Walk left 2. 
+7. Walk right 1
+8. Walk right 2. 
+
+if flipping is too messy. 
