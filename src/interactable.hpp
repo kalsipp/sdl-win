@@ -1,5 +1,4 @@
 
-/*
 #pragma once
 
 #include "gameobject.hpp"
@@ -11,4 +10,5 @@ public:
 private:
 	Collider * m_trigger_collider = NULL;
 };
+/*
 */

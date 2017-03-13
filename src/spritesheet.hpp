@@ -6,6 +6,7 @@
 #include <string>
 #include <chrono>
 #include <vector>
+#include <cassert>
 #include "texture.hpp"
 
 /*
@@ -30,7 +31,7 @@ private:
 	Texture * m_sheet;
 	unsigned int m_size;
 	unsigned int m_original_size;
-	std::vector<int> m_pattern = {0,1,2,3};
+	std::vector<int> m_pattern = {0};
 	unsigned int m_current_anim = 0;
 	std::chrono::time_point<std::chrono::high_resolution_clock> m_last_anim;
 	double m_anim_duration = 1;

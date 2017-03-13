@@ -35,12 +35,13 @@ bool Spritesheet::load_from_file(const std::string & path, int sprite_size){
 		std::cout << "Unable to load image " << path << " SDL Error: " << SDL_GetError() << "." << std::endl;
 		success = false;
 	}else{
-		//std::cout << "Image is " <<  std::to_string(full_sheet->w) << "w, " << std::to_string(full_sheet ->h) << "h." << std::endl;
+		assert(full_sheet->w%sprite_size == 0 && full_sheet->h%sprite_size==0);
+		int y_max = round(full_sheet->h/sprite_size);
+		int x_max = round(full_sheet->w/sprite_size);
 		int pos = 0;
-		for(int y = 0; y < 8; ++y){
-			for(int x = 0; x < 8; ++x){
+		for(int y = 0; y < y_max; ++y){
+			for(int x = 0; x < x_max; ++x){
 				SDL_Rect srcrect = {x*size(), y*size(), size(), size()};
-
 				SDL_Surface * tmp = SDL_CreateRGBSurface(
 					full_sheet->flags, 
 					size(), 
@@ -88,6 +89,7 @@ void Spritesheet::update_anim(){
 }
 
 Texture * Spritesheet::get_next_anim(){;
+	if(m_textures.size() == 0) std::cout << "Warning m_textures size is 0" << std::endl;
 	return m_textures[m_pattern[m_current_anim]];
 }
 

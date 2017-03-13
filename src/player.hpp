@@ -7,7 +7,7 @@ class Actor;
 //class Mainclass;
 class Player:public Actor{
 public:
-	Player(const Mainclass *);
+	Player(Mainclass *);
 	virtual void update();
 
 private:

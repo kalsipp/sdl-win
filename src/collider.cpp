@@ -102,15 +102,16 @@ bool Collider::collision_y(const Collider&other){
 
 /*
 */
-bool Collider::collision_check(const Collider & other){
+bool Collider::collision_check(const Collider * other){
 	if(!m_enabled) return false;
+	if(other == NULL) return false;
 	//std::cout << "HUr" << std::endl;
 	
 	//if() std::cout  << "horizontally" << std::endl;
 	//if() std::cout << "vertically" << std::endl;
 	//if(!(left() < other.right() || right() > other.left())) std::cout  << "horizontally" << std::endl;
 	//if(!(top() < other.bottom() || bottom() > other.top())) std::cout << "vertically" << std::endl;
-	return collision_x(other) && collision_y(other);
+	return collision_x(*other) && collision_y(*other);
 	//return (abs(x() + size().first/2 - (other.x() + other.size().first/2))) * 2 <= (size().first + other.size().first) 
 	//&& (abs((y() + size().second/2) - (other.y() + other.size().second/2)) * 2 <= (size().second + other.size().second));
 

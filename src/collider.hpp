@@ -21,7 +21,7 @@ public:
 	void set_size(float x, float y);
 	bool collision_x(const Collider &);
 	bool collision_y(const Collider &);
-	bool collision_check(const Collider &); //Checks collision in x and y. z is ignored. 
+	bool collision_check(const Collider *); //Checks collision in x and y. z is ignored. 
 	const Position & position()const;
 	float x();
 	float x()const;

@@ -9,7 +9,7 @@ const std::vector<int> Gameobject::ANIMATION_WALKING_RIGHT = {8,9,10,11};
 */
 
 
-Gameobject::Gameobject(const Mainclass * mainclass):m_mainclass(mainclass){
+Gameobject::Gameobject(Mainclass * mainclass):m_mainclass(mainclass){
 	//m_main_renderer = main_renderer;
 	//m_spritesheet = new Spritesheet(mainclass->main_renderer());
 	//m_old_position = new Position();
@@ -67,10 +67,13 @@ Position Gameobject::position()const{
 	return m_position;
 }
 
-Collider & Gameobject::collider(){
-	return *m_collider;
+Collider * Gameobject::collider(){
+	return m_collider;
 }
 
+Collider * Gameobject::trigger_collider(){
+	return m_trigger_collider;
+}
 
 void Gameobject::update_anim(){
 	
@@ -83,20 +86,21 @@ Spritesheet * Gameobject::spritesheet(){
 	return m_spritesheet;
 }
 
-void Gameobject::render(){
+void Gameobject::render(){	
 	if(m_spritesheet != NULL){
 		m_spritesheet->update_anim();
 		m_spritesheet->get_next_anim()->render(position().x(), position().y());
+	}else{
+		m_texture->render(position().x(), position().y());
 	}
 }
 
-bool Gameobject::load_from_file(const std::string & path){
-	if(m_spritesheet != NULL){
 
+bool Gameobject::load_spritesheet(const std::string & path){
+	if(m_spritesheet == NULL) m_spritesheet = new Spritesheet(m_mainclass->main_renderer());
 		if(m_spritesheet->load_from_file(path, 32)){
 			m_spritesheet->set_anim_duration(300);
 			return true;
 		}
-	}
 	return false;
 }

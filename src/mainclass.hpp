@@ -10,7 +10,6 @@
 
 #include "texture.hpp"
 #include "spritesheet.hpp"
-#include "interactable.hpp"
 #include "gameobject.hpp"
 
 /*
@@ -25,13 +24,12 @@ public:
 	~Mainclass();
 	void run();
 	const std::vector<Gameobject*> & gameobjects()const;
-	bool key(int)const;
+	bool key(int);
 	const SDL_Renderer * main_renderer()const;
 
 private:	
 	void setup_keys(); //Allocate m_keys and set values
 	void setup_gameobjects(); //Generate gameobjects for the current map
-	void update_player(); 
 	void update_keys();
 	//void dyn_movement(Gameobject *, const std::pair<float, float> &);
 	SDL_Window * m_main_window = NULL;

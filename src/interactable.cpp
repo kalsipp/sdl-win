@@ -1,5 +1,4 @@
 
-/*
 #include "interactable.hpp"
 
 Collider & Interactable::trigger_collider(){
@@ -9,4 +8,5 @@ Collider & Interactable::trigger_collider(){
 void Interactable::interact(){
 
 }
+/*
 */
