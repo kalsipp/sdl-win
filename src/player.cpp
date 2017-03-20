@@ -1,7 +1,9 @@
 #include "player.hpp"
-#include "actor.hpp"
-Player::Player(Mainclass * mainclass):Actor(mainclass){
+#include "mainclass.hpp"
 
+//#include "actor.hpp"
+Player::Player(Mainclass * mainclass):Actor(mainclass){
+	m_trigger_collider = new Collider(m_position, 128, 128)
 }
 
 void Player::update(){

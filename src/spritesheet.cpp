@@ -14,38 +14,33 @@ Spritesheet::~Spritesheet(){
 
 
 
-int Spritesheet::size(){
-	return m_size;
-}
+
 
 void Spritesheet::scale(const int & x){
 	for(unsigned int i = 0; i < m_textures.size(); ++i){
 		m_textures[i]->scale(x,x);
-		m_size = m_original_size*x;
 	}
 }
 
-bool Spritesheet::load_from_file(const std::string & path, int sprite_size){ 
+bool Spritesheet::load_from_file(const std::string & path, int sprite_width, int sprite_height){ 
 	SDL_Surface * full_sheet = NULL;
-	m_size = sprite_size;
-	m_original_size = m_size;
 	full_sheet = IMG_Load(path.c_str());
 	bool success = true;
 	if(full_sheet == NULL){
 		std::cout << "Unable to load image " << path << " SDL Error: " << SDL_GetError() << "." << std::endl;
 		success = false;
 	}else{
-		assert(full_sheet->w%sprite_size == 0 && full_sheet->h%sprite_size==0);
-		int y_max = round(full_sheet->h/sprite_size);
-		int x_max = round(full_sheet->w/sprite_size);
+		assert(full_sheet->w%sprite_width == 0 && full_sheet->h%sprite_height==0);
+		int y_max = round(full_sheet->h/sprite_height);
+		int x_max = round(full_sheet->w/sprite_width);
 		int pos = 0;
 		for(int y = 0; y < y_max; ++y){
 			for(int x = 0; x < x_max; ++x){
-				SDL_Rect srcrect = {x*size(), y*size(), size(), size()};
+				SDL_Rect srcrect = {x*sprite_width, y*sprite_height, sprite_width, sprite_height};
 				SDL_Surface * tmp = SDL_CreateRGBSurface(
 					full_sheet->flags, 
-					size(), 
-					size(),
+					sprite_width, 
+					sprite_height,
 					32, 
 					full_sheet->format->Rmask, 
 					full_sheet->format->Gmask, 
@@ -94,8 +89,8 @@ Texture * Spritesheet::get_next_anim(){;
 }
 
 Texture * Spritesheet::get_text(const int & n){
-	if(n > size()*size()-1){
-		std::cout << "Warning out of bounds in spritesheet: " << n << std::endl;
-	}
+	//if(n > size()*size()-1){
+	//	std::cout << "Warning out of bounds in spritesheet: " << n << std::endl;
+	//}
 	return m_textures[n];
 }

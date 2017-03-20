@@ -1,5 +1,7 @@
 #include "actor.hpp"
-#include "gameobject.hpp"
+#include "mainclass.hpp"
+
+//#include "gameobject.hpp"
 
 const std::vector<int> Actor::ANIMATION_UP = {0, 1};
 const std::vector<int> Actor::ANIMATION_DOWN = {6, 7};

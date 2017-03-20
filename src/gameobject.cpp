@@ -98,7 +98,7 @@ void Gameobject::render(){
 
 bool Gameobject::load_spritesheet(const std::string & path){
 	if(m_spritesheet == NULL) m_spritesheet = new Spritesheet(m_mainclass->main_renderer());
-		if(m_spritesheet->load_from_file(path, 32)){
+		if(m_spritesheet->load_from_file(path, 32, 32)){
 			m_spritesheet->set_anim_duration(300);
 			return true;
 		}

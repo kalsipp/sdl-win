@@ -18,9 +18,8 @@ class Spritesheet{
 public:
 	Spritesheet(const SDL_Renderer *);
 	~Spritesheet();
-	int size(); //Returns m_size which is the size of each image
 	void scale(const int &);
-	bool load_from_file(const std::string &, int size);	//size of each sprite. currently only 32. Currenly locked to 8x8 spritesheets. 
+	bool load_from_file(const std::string &, int size, int sizey);	//size of each sprite. currently only 32. Currenly locked to 8x8 spritesheets. 
 	void set_pattern(const std::vector<int> &); //Set current animation pattern. 
 	Texture * get_text(const int &);
 	void update_anim();
@@ -29,8 +28,6 @@ public:
 private:
 	SDL_Renderer const * m_main_renderer;
 	Texture * m_sheet;
-	unsigned int m_size;
-	unsigned int m_original_size;
 	std::vector<int> m_pattern = {0};
 	unsigned int m_current_anim = 0;
 	std::chrono::time_point<std::chrono::high_resolution_clock> m_last_anim;

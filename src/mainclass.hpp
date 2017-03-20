@@ -9,8 +9,8 @@
 #include <algorithm>
 
 #include "texture.hpp"
+
 #include "spritesheet.hpp"
-#include "gameobject.hpp"
 
 /*
 	This class contains 

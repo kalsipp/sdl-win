@@ -1,4 +1,6 @@
 #include "mainclass.hpp"
+#include "gameobject.hpp"
+#include "npc.hpp"
 #include "player.hpp"
 #include "actor.hpp"
 Mainclass::Mainclass(){
